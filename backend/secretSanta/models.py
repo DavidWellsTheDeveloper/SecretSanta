@@ -26,7 +26,7 @@ class SantaPairing(models.Model):
     santaEventUser = models.ForeignKey(EventUser, on_delete=models.CASCADE)
     targetEventUser = models.ForeignKey(EventUser, on_delete=models.CASCADE)
 
-class WishListItem(models.Model)
+class WishListItem(models.Model):
     id = models.AutoField(primary_key=True)
     eventUser = models.ForeignKey(EventUser, on_delete=models.CASCADE)
     Description = models.TextField()

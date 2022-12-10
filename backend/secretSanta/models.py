@@ -8,3 +8,5 @@ class Event(models.Model):
     createdDate = models.DateTimeField(auto_now_add=True)
     pairingDate = models.DateTimeField(null=True)
     modifiedDate = models.DateTimeField(auto_now=True)
+
+# class SantaPairing

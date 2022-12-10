@@ -20,8 +20,14 @@ class ExclusionPairing(models.Model):
     id = models.AutoField(primary_key=True)
     eventUser1 = models.ForeignKey(EventUser, on_delete=models.CASCADE)
     eventUser2 = models.ForeignKey(EventUser, on_delete=models.CASCADE)
-    
+
 class SantaPairing(models.Model):
     id = models.AutoField(primary_key=True)
     santaEventUser = models.ForeignKey(EventUser, on_delete=models.CASCADE)
     targetEventUser = models.ForeignKey(EventUser, on_delete=models.CASCADE)
+
+class WishListItem(models.Model)
+    id = models.AutoField(primary_key=True)
+    eventUser = models.ForeignKey(EventUser, on_delete=models.CASCADE)
+    Description = models.TextField()
+    url = models.URLField()

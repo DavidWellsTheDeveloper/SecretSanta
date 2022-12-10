@@ -16,9 +16,12 @@ class EventUser(models.Model):
     eventId = models.ForeignKey(Event, on_delete=models.CASCADE)
     isOwner = models.BooleanField(default=False)
 
-class SantaPairing
-
 class ExclusionPairing(models.Model):
     id = models.AutoField(primary_key=True)
     eventUser1 = models.ForeignKey(EventUser, on_delete=models.CASCADE)
     eventUser2 = models.ForeignKey(EventUser, on_delete=models.CASCADE)
+    
+class SantaPairing(models.Model):
+    id = models.AutoField(primary_key=True)
+    santaEventUser = models.ForeignKey(EventUser, on_delete=models.CASCADE)
+    targetEventUser = models.ForeignKey(EventUser, on_delete=models.CASCADE)

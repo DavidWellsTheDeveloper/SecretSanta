@@ -37,7 +37,12 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+
+    # Custom Apps
     'secretSanta.apps.SecretsantaConfig',
+
+    # Third Party
+    'rest_framework',
 ]
 
 MIDDLEWARE = [

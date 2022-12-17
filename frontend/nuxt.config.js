@@ -1,5 +1,7 @@
 import colors from 'vuetify/es5/util/colors'
 
+const development = process.env.NODE_ENV !== 'production'
+
 export default {
   // Target: https://go.nuxtjs.dev/config-target
   target: 'static',
@@ -36,7 +38,7 @@ export default {
   // Modules for dev and build (recommended): https://go.nuxtjs.dev/config-modules
   buildModules: [
     // https://go.nuxtjs.dev/eslint
-    '@nuxtjs/eslint-module',
+    // '@nuxtjs/eslint-module',
     // https://go.nuxtjs.dev/vuetify
     '@nuxtjs/vuetify'
   ],
@@ -44,13 +46,42 @@ export default {
   // Modules: https://go.nuxtjs.dev/config-modules
   modules: [
     // https://go.nuxtjs.dev/axios
-    '@nuxtjs/axios'
+    '@nuxtjs/axios',
+    '@nuxtjs/auth',
   ],
 
   // Axios module configuration: https://go.nuxtjs.dev/config-axios
   axios: {
-    // Workaround to avoid enforcing hard-coded localhost:3000: https://github.com/nuxt-community/axios-module/issues/308
-    baseURL: '/'
+    baseURL: development
+      ? 'http://localhost:8000'
+      : 'https://pantrytostore.com/api',
+  },
+
+  auth: {
+    strategies: {
+      // JWT token auth
+      local: {
+        scheme: 'refresh',
+        endpoints: {
+          login: {
+            url: '/api/token/',
+            method: 'post',
+            propertyName: 'access',
+          },
+          refreshToken: {
+            url: 'api/token/refresh/',
+            method: 'post',
+            property: 'refresh',
+          },
+          logout: false,
+          user: {
+            url: '/user/users/',
+            method: 'get',
+            propertyName: false,
+          },
+        },
+      },
+    },
   },
 
   // Vuetify module configuration: https://go.nuxtjs.dev/config-vuetify
@@ -70,6 +101,11 @@ export default {
         }
       }
     }
+  },
+
+  router: {
+    // By default, views will require login.
+    middleware: ['auth'],
   },
 
   // Build Configuration: https://go.nuxtjs.dev/config-build

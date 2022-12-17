@@ -1,83 +1,109 @@
 <template>
-  <v-row justify="center" align="center">
-    <v-col cols="12" sm="8" md="6">
-      <v-card class="logo py-4 d-flex justify-center">
-        <NuxtLogo />
-        <VuetifyLogo />
-      </v-card>
-      <v-card>
-        <v-card-title class="headline">
-          Welcome to the Vuetify + Nuxt.js template
-        </v-card-title>
-        <v-card-text>
-          <p>Vuetify is a progressive Material Design component framework for Vue.js. It was designed to empower developers to create amazing applications.</p>
-          <p>
-            For more information on Vuetify, check out the <a
-              href="https://vuetifyjs.com"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              documentation
-            </a>.
-          </p>
-          <p>
-            If you have questions, please join the official <a
-              href="https://chat.vuetifyjs.com/"
-              target="_blank"
-              rel="noopener noreferrer"
-              title="chat"
-            >
-              discord
-            </a>.
-          </p>
-          <p>
-            Find a bug? Report it on the github <a
-              href="https://github.com/vuetifyjs/vuetify/issues"
-              target="_blank"
-              rel="noopener noreferrer"
-              title="contribute"
-            >
-              issue board
-            </a>.
-          </p>
-          <p>Thank you for developing with Vuetify and I look forward to bringing more exciting features in the future.</p>
-          <div class="text-xs-right">
-            <em><small>&mdash; John Leider</small></em>
-          </div>
-          <hr class="my-3">
-          <a
-            href="https://nuxtjs.org/"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Nuxt Documentation
-          </a>
-          <br>
-          <a
-            href="https://github.com/nuxt/nuxt.js"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Nuxt GitHub
-          </a>
-        </v-card-text>
-        <v-card-actions>
-          <v-spacer />
-          <v-btn
-            color="primary"
-            nuxt
-            to="/inspire"
-          >
-            Continue
-          </v-btn>
-        </v-card-actions>
-      </v-card>
-    </v-col>
-  </v-row>
+  <v-container>
+    <v-card width="400" class="mx-auto mt-5">
+      <v-card-title>
+        <h1 class="display-1 mx-auto">Login</h1>
+      </v-card-title>
+      <v-card-text>
+        <v-form id="login-form" v-model="valid" @submit.prevent="loginUser">
+          <v-text-field
+            id="username-field"
+            v-model="login.username"
+            label="username"
+            :rules="rules_username"
+            prepend-icon="mdi-account-circle"
+          ></v-text-field>
+          <v-text-field
+            id="password-field"
+            v-model="login.password"
+            label="password"
+            :rules="rules_password"
+            prepend-icon="mdi-lock"
+            :type="showPassword ? 'text' : 'password'"
+            :append-icon="showPassword ? 'mdi-eye' : 'mdi-eye-off'"
+            @click:append="showPassword = !showPassword"
+          ></v-text-field>
+          <v-row>
+            <v-col>
+              <v-btn color="info" :disabled="!valid" type="submit">
+                Login
+              </v-btn>
+            </v-col>
+          </v-row>
+          <v-row>
+            <v-col>
+              <v-btn type="link" small text to="/Register" color="error">
+                Need an account? Register.
+              </v-btn>
+            </v-col>
+          </v-row>
+        </v-form>
+      </v-card-text>
+      <v-alert v-if="loginError" dense text type="error">
+        {{ loginErrorMessage }}
+      </v-alert>
+    </v-card>
+    <v-card>
+      <v-card-title v-if="$auth.loggedIn" class="headline text-center">
+        Welcome {{ $auth.user }}
+      </v-card-title>
+    </v-card>
+  </v-container>
 </template>
 
 <script>
 export default {
-  name: 'IndexPage'
-}
+  auth: false,
+  name: "Login",
+  data() {
+    return {
+      valid: false,
+      rules_username: [(value) => !!value || "Required"],
+      rules_password: [(value) => !!value || "Required"],
+      showPassword: false,
+      login: {
+        username: "",
+        password: "",
+      },
+      loginError: false,
+      loginErrorMessage:
+        "Something went wrong when logging in. Check your Username & Password, and try again.",
+    };
+  },
+  methods: {
+    loginUser() {
+      this.loginError = false;
+      this.$auth
+        .loginWith("local", {
+          data: this.login,
+        })
+        .then((resp) => {
+          this.$auth.setToken("local", "Bearer " + resp.data.access);
+          this.$auth.setRefreshToken("local", resp.data.refresh);
+          this.$axios.setHeader("Authorization", "Bearer " + resp.data.access);
+          this.$auth.ctx.app.$axios.setHeader(
+            "Authorization",
+            "Bearer " + resp.data.access
+          );
+          if (resp.status === 200) this.$router.push({ name: "index" });
+        })
+        .catch((error) => {
+          console.log(error);
+          this.loginError = true;
+        });
+    },
+  },
+  head() {
+    return {
+      title: "Login",
+      meta: [
+        {
+          hid: "description",
+          name: "description",
+          content: "Login to manage your own recipes, food, and ingredients",
+        },
+      ],
+    };
+  },
+};
 </script>

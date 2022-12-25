@@ -17,6 +17,11 @@ cd backend
 pip install -r requirements.txt
 ```
 
+### Setup on Both
+```
+python manage.py migrate
+```
+
 ## Frontend Setup
 ### Node
 ```

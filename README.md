@@ -10,8 +10,9 @@ source venv/bin/activate
 pip install -r requirements.txt
 
 For Windows:
-cd backend\winvenv
-.\env\Scripts\activater
+cd backend
+.\winvenv\env\Scripts\activate
+pip install -r requirements.txt
 ```
 
 ## Frontend Setup

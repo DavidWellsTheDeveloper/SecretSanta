@@ -9,7 +9,7 @@ cd backend
 source venv/bin/activate
 pip install -r requirements.txt
 
-For Windows
+For Windows:
 cd backend\winvenv
 .\env\Scripts\activater
 ```

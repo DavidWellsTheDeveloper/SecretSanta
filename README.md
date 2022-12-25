@@ -8,8 +8,10 @@ For Linux:
 cd backend
 source venv/bin/activate
 pip install -r requirements.txt
+```
 
-For Windows:
+### Setup on linux
+```
 cd backend
 .\winvenv\env\Scripts\activate
 pip install -r requirements.txt

@@ -10,7 +10,7 @@ source venv/bin/activate
 pip install -r requirements.txt
 ```
 
-### Setup on linux
+### Setup on windows
 ```
 cd backend
 .\winvenv\env\Scripts\activate

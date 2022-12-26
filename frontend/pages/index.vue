@@ -48,13 +48,23 @@
         Welcome {{ $auth.user }}
       </v-card-title>
     </v-card>
+    <v-card>
+      <v-card-title v-if="$auth.username='Rick'" >
+        Super user '{{$auth.username}}' is logged in!!!
+      </v-card-title>
+    </v-card>
   </v-container>
 </template>
 
 <script>
+import Login from "~/components/Login.vue"
+
 export default {
   auth: false,
-  name: "Login",
+  name: "Index",
+  components: {
+    Login,
+  },
   data() {
     return {
       valid: false,

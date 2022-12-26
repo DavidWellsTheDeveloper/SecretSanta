@@ -54,14 +54,14 @@ export default {
   axios: {
     baseURL: development
       ? 'http://localhost:8000'
-      : 'https://pantrytostore.com/api',
+      : 'http://localhost:8000/api',
+      // change second to domain name once we have one
   },
 
   auth: {
     strategies: {
       // JWT token auth
       local: {
-        scheme: 'refresh',
         endpoints: {
           login: {
             url: '/api/token/',
@@ -80,6 +80,12 @@ export default {
             propertyName: false,
           },
         },
+        tokenType: 'Token',
+        tokenName: 'Authorization',
+      },
+      redirect: {
+        login: '/login',
+        home: '/',
       },
     },
   },

@@ -47,23 +47,6 @@
               </v-col>
             </v-row>
             <v-row>
-              <!-- <v-col cols="1">
-                <v-tooltip bottom>
-                  <template v-slot:activator="{ on, attrs }">
-                    <v-icon color="primary" dark v-bind="attrs" v-on="on">
-                      mdi-information
-                    </v-icon>
-                  </template>
-                  <span>
-                    Password Rules:
-                    <ul>
-                      <li>Must be 8 characters</li>
-                      <li>Must contain a special character</li>
-                      <li>Must contain a number</li>
-                    </ul>
-                  </span>
-                </v-tooltip>
-              </v-col> -->
               <v-col cols="12">
                 <v-text-field
                   id="password-field"
@@ -161,7 +144,7 @@
       onSubmit() {
         this.$axios.post('/user/create/', this.user).then((resp) => {
           // TODO confirm success before redirecting to login.
-          this.$router.push({ name: 'Login' })
+          this.$router.push({ name: 'login' })
         })
       },
     },

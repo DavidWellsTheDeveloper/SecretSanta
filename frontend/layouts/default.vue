@@ -2,16 +2,77 @@
   <v-app dark>
     <v-navigation-drawer
       v-model="drawer"
-      :mini-variant="miniVariant"
-      :clipped="clipped"
-      fixed
+      :expand-on-hover="$vuetify.breakpoint.mdAndUp"
+      :permanent="$vuetify.breakpoint.mdAndUp"
       app
+      dark
+      color="primary"
     >
       <v-list>
         <v-list-item
-          v-for="(item, i) in items"
+          v-for="(item, i) in itemsCommon"
           :key="i"
           :to="item.to"
+          :color="activeLinkColor"
+          router
+          exact
+        >
+          <v-list-item-action>
+            <v-icon>{{ item.icon }}</v-icon>
+          </v-list-item-action>
+          <v-list-item-content>
+            <v-list-item-title>{{ item.title }}</v-list-item-title>
+          </v-list-item-content>
+        </v-list-item>
+
+        <v-list-item @click="toggleDarkTheme()">
+          <v-list-item-action>
+            <v-icon>
+              {{
+                $vuetify.theme.dark ? 'mdi-brightness-5' : 'mdi-weather-night'
+              }}
+            </v-icon>
+          </v-list-item-action>
+          <v-list-item-content>
+            <v-list-item-title>Change Theme</v-list-item-title>
+          </v-list-item-content>
+        </v-list-item>
+        <v-divider></v-divider>
+      </v-list>
+
+      <v-list v-show="$auth.loggedIn">
+        <v-list-item
+          v-for="(item, i) in itemsLoggedIn"
+          :key="i"
+          :to="item.to"
+          :color="activeLinkColor"
+          router
+          exact
+        >
+          <v-list-item-action>
+            <v-icon>{{ item.icon }}</v-icon>
+          </v-list-item-action>
+          <v-list-item-content>
+            <v-list-item-title>{{ item.title }}</v-list-item-title>
+          </v-list-item-content>
+        </v-list-item>
+
+        <v-list-item @click="logout()">
+          <v-list-item-action>
+            <v-icon>mdi-account-circle</v-icon>
+          </v-list-item-action>
+          <v-list-item-content>
+            <v-list-item-title>Logout</v-list-item-title>
+          </v-list-item-content>
+        </v-list-item>
+      </v-list>
+
+      <v-list v-show="!$auth.loggedIn">
+        <v-list-item
+          v-for="(item, i) in itemsNotLoggedIn"
+          :key="i"
+          :to="item.to"
+          :color="activeLinkColor"
           router
           exact
         >
@@ -24,95 +85,83 @@
         </v-list-item>
       </v-list>
     </v-navigation-drawer>
-    <v-app-bar
-      :clipped-left="clipped"
-      fixed
-      app
-    >
-      <v-app-bar-nav-icon @click.stop="drawer = !drawer" />
-      <v-btn
-        icon
-        @click.stop="miniVariant = !miniVariant"
-      >
-        <v-icon>mdi-{{ `chevron-${miniVariant ? 'right' : 'left'}` }}</v-icon>
-      </v-btn>
-      <v-btn
-        icon
-        @click.stop="clipped = !clipped"
-      >
-        <v-icon>mdi-application</v-icon>
-      </v-btn>
-      <v-btn
-        icon
-        @click.stop="fixed = !fixed"
-      >
-        <v-icon>mdi-minus</v-icon>
-      </v-btn>
+
+    <v-app-bar v-if="$vuetify.breakpoint.smAndDown" clipped-left app>
+      <v-app-bar-nav-icon @click="drawer = !drawer" />
       <v-toolbar-title>{{ title }}</v-toolbar-title>
-      <v-spacer />
-      <v-btn
-        icon
-        @click.stop="rightDrawer = !rightDrawer"
-      >
-        <v-icon>mdi-menu</v-icon>
-      </v-btn>
     </v-app-bar>
     <v-main>
-      <v-container>
-        <Nuxt />
-      </v-container>
+      <nuxt />
     </v-main>
-    <v-navigation-drawer
-      v-model="rightDrawer"
-      :right="right"
-      temporary
-      fixed
-    >
-      <v-list>
-        <v-list-item @click.native="right = !right">
-          <v-list-item-action>
-            <v-icon light>
-              mdi-repeat
-            </v-icon>
-          </v-list-item-action>
-          <v-list-item-title>Switch drawer (click me)</v-list-item-title>
-        </v-list-item>
-      </v-list>
-    </v-navigation-drawer>
-    <v-footer
-      :absolute="!fixed"
-      app
-    >
-      <span>&copy; {{ new Date().getFullYear() }}</span>
+    <v-footer app>
+      <span>&copy; Secret Santa {{ new Date().getFullYear() }}</span>
     </v-footer>
   </v-app>
 </template>
 
 <script>
 export default {
-  name: 'DefaultLayout',
-  data () {
+  data() {
     return {
-      clipped: false,
+      title: 'Pantry To Store',
       drawer: false,
       fixed: false,
-      items: [
+      itemsCommon: [
         {
           icon: 'mdi-apps',
           title: 'Welcome',
-          to: '/'
+          to: '/',
+        },
+      ],
+      itemsLoggedIn: [
+        {
+          icon: 'mdi-cart-variant',
+          title: 'Create Event',
+          to: '/CreateEvent',
         },
         {
-          icon: 'mdi-chart-bubble',
-          title: 'Inspire',
-          to: '/inspire'
-        }
+          icon: 'mdi-text-box-multiple',
+          title: 'My Events',
+          to: '/MyEvents',
+        },
       ],
-      miniVariant: false,
-      right: true,
-      rightDrawer: false,
-      title: 'Vuetify.js'
+      itemsNotLoggedIn: [
+        {
+          icon: 'mdi-account-circle',
+          title: 'Login',
+          to: '/login',
+        },
+        {
+          icon: 'mdi-account-check-outline',
+          title: 'Register',
+          to: '/register',
+        },
+      ],
+      activeLinkColor: 'secondary',
     }
-  }
+  },
+  methods: {
+    logout() {
+      this.$auth.logout()
+      this.$router.push({ name: 'login' })
+    },
+    toggleDarkTheme() {
+      this.$vuetify.theme.dark = !this.$vuetify.theme.dark
+    },
+  },
+  head() {
+    return {
+      title: 'Secret Santa',
+      titleTemplate: 'Secret Santa | %s',
+      meta: [
+        {
+          hid: 'description',
+          name: 'description',
+          content:
+            'Secret Santa is the last Secret Santa app you\'ll ever need.',
+        },
+      ],
+    }
+  },
 }
 </script>

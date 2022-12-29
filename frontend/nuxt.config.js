@@ -62,6 +62,15 @@ export default {
     strategies: {
       // JWT token auth
       local: {
+        token: {
+          property: "access",
+          global: true,
+          type: "Bearer",
+          required: true
+        },
+        user: {
+          property: 'user'
+        },
         endpoints: {
           login: {
             url: '/api/token/',
@@ -71,7 +80,7 @@ export default {
           refreshToken: {
             url: 'api/token/refresh/',
             method: 'post',
-            property: 'refresh',
+            propertyName: 'refresh',
           },
           logout: false,
           user: {
@@ -80,8 +89,6 @@ export default {
             propertyName: false,
           },
         },
-        tokenType: 'Token',
-        tokenName: 'Authorization',
       },
       redirect: {
         login: '/login',

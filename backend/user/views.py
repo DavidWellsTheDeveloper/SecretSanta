@@ -13,7 +13,7 @@ from django.contrib.auth import get_user_model
 
 class UserDetail(viewsets.ModelViewSet):
   permission_classes = [IsAuthenticated]
-  authentication_classes = [SessionAuthentication, TokenAuthentication, JWTAuthentication]
+  authentication_classes = [JWTAuthentication]
   serializer_class = UserSerializer
 
   def get_queryset(self):

@@ -10,11 +10,19 @@ class Event(models.Model):
     pairingDate = models.DateTimeField(null=True)
     modifiedDate = models.DateTimeField(auto_now=True)
 
+    def __str__(self):
+        # Name shown by default when refering to this model
+        return self.eventName
+
 class EventUser(models.Model):
     id = models.AutoField(primary_key=True)
     userId = models.ForeignKey(User, on_delete=models.CASCADE)
     eventId = models.ForeignKey(Event, on_delete=models.CASCADE)
     isOwner = models.BooleanField(default=False)
+    
+    def __str__(self):
+        # Name shown by default when refering to this model
+        return f"{self.userId.first_name} {self.userId.last_name}: {self.eventId}"
 
 class ExclusionPairing(models.Model):
     id = models.AutoField(primary_key=True)
@@ -30,4 +38,4 @@ class WishListItem(models.Model):
     id = models.AutoField(primary_key=True)
     eventUser = models.ForeignKey(EventUser, on_delete=models.CASCADE)
     Description = models.TextField()
-    url = models.URLField()
+    url = models.URLField(max_length=500, null=True)

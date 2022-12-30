@@ -17,7 +17,7 @@ class Event(models.Model):
 class EventUser(models.Model):
     id = models.AutoField(primary_key=True)
     userId = models.ForeignKey(User, on_delete=models.CASCADE)
-    eventId = models.ForeignKey(Event, on_delete=models.CASCADE)
+    eventId = models.ForeignKey(Event, on_delete=models.CASCADE, related_name="userEvent")
     isOwner = models.BooleanField(default=False)
     
     def __str__(self):

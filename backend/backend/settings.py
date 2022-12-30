@@ -46,6 +46,7 @@ INSTALLED_APPS = [
     # 3ed party
     'rest_framework',
     'corsheaders',
+    'django_filters',
 
     # Project apps
     'user',
@@ -139,7 +140,10 @@ REST_FRAMEWORK = {
         'rest_framework.authentication.SessionAuthentication',
         'rest_framework.authentication.TokenAuthentication',
         'rest_framework_simplejwt.authentication.JWTAuthentication',
-    )
+    ),
+    # 'DEFAULT_FILTER_BACKENDS': [
+    #     'url_filter.integrations.drf.DjangoFilterBackend',
+    # ]
 }
 
 CORS_ORIGIN_WHITELIST = (

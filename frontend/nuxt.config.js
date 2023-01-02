@@ -54,7 +54,7 @@ export default {
   axios: {
     baseURL: development
       ? 'http://localhost:8000'
-      : 'http://localhost:8000/api',
+      : 'http://localhost:8000',
       // change second to domain name once we have one
   },
 
@@ -101,7 +101,7 @@ export default {
   vuetify: {
     customVariables: ['~/assets/variables.scss'],
     theme: {
-      dark: true,
+      dark: false,
       themes: {
         dark: {
           primary: colors.blue.darken2,

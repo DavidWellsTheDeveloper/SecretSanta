@@ -54,14 +54,23 @@ export default {
   axios: {
     baseURL: development
       ? 'http://localhost:8000'
-      : 'https://pantrytostore.com/api',
+      : 'http://localhost:8000',
+      // change second to domain name once we have one
   },
 
   auth: {
     strategies: {
       // JWT token auth
       local: {
-        scheme: 'refresh',
+        token: {
+          property: "access",
+          global: true,
+          type: "Bearer",
+          required: true
+        },
+        user: {
+          property: 'user'
+        },
         endpoints: {
           login: {
             url: '/api/token/',
@@ -71,7 +80,7 @@ export default {
           refreshToken: {
             url: 'api/token/refresh/',
             method: 'post',
-            property: 'refresh',
+            propertyName: 'refresh',
           },
           logout: false,
           user: {
@@ -81,6 +90,10 @@ export default {
           },
         },
       },
+      redirect: {
+        login: '/login',
+        home: '/',
+      },
     },
   },
 
@@ -88,7 +101,7 @@ export default {
   vuetify: {
     customVariables: ['~/assets/variables.scss'],
     theme: {
-      dark: true,
+      dark: false,
       themes: {
         dark: {
           primary: colors.blue.darken2,

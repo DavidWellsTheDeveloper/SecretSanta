@@ -1,5 +1,6 @@
 <template>
   <v-container>
+<<<<<<< HEAD
     <v-card width="400" class="mx-auto mt-5">
       <v-card-title>
         <h1 class="display-1 mx-auto">Login</h1>
@@ -53,6 +54,9 @@
         Super user '{{$auth.username}}' is logged in!!!
       </v-card-title>
     </v-card>
+=======
+    <h1>Home Page</h1>
+>>>>>>> db4392f2b659415dbd5d5b4678b420071c44a7ae
   </v-container>
 </template>
 
@@ -61,56 +65,23 @@ import Login from "~/components/Login.vue"
 
 export default {
   auth: false,
-  name: "Index",
-  components: {
-    Login,
-  },
+  name: "index",
   data() {
     return {
-      valid: false,
-      rules_username: [(value) => !!value || "Required"],
-      rules_password: [(value) => !!value || "Required"],
-      showPassword: false,
-      login: {
-        username: "",
-        password: "",
-      },
-      loginError: false,
-      loginErrorMessage:
-        "Something went wrong when logging in. Check your Username & Password, and try again.",
-    };
+      
+    }
   },
   methods: {
-    loginUser() {
-      this.loginError = false;
-      this.$auth
-        .loginWith("local", {
-          data: this.login,
-        })
-        .then((resp) => {
-          this.$auth.setToken("local", "Bearer " + resp.data.access);
-          this.$auth.setRefreshToken("local", resp.data.refresh);
-          this.$axios.setHeader("Authorization", "Bearer " + resp.data.access);
-          this.$auth.ctx.app.$axios.setHeader(
-            "Authorization",
-            "Bearer " + resp.data.access
-          );
-          if (resp.status === 200) this.$router.push({ name: "index" });
-        })
-        .catch((error) => {
-          console.log(error);
-          this.loginError = true;
-        });
-    },
+    
   },
   head() {
     return {
-      title: "Login",
+      title: "Home",
       meta: [
         {
           hid: "description",
           name: "description",
-          content: "Login to manage your own recipes, food, and ingredients",
+          content: "Home Page",
         },
       ],
     };

@@ -45,13 +45,8 @@
                 </v-alert>
             </v-card>
             <v-card>
-                <v-card-title v-if="$auth.loggedIn" class="headline text-center">
-                    Welcome {{ $auth.user }}
-                </v-card-title>
-            </v-card>
-            <v-card>
-                <v-card-title v-if="$auth.username='Rick'" >
-                    Super user '{{$auth.username}}' is logged in!!!
+                <v-card-title class="headline text-center">
+                    Welcome {{ $auth.loggedIn }}
                 </v-card-title>
             </v-card>
         </v-container>
@@ -61,6 +56,7 @@
 
 <script>
     export default {
+        auth: false,
         name: "Login",
         data() {
             return {
@@ -76,8 +72,44 @@
                 loginErrorMessage:
                 "Something went wrong when logging in. Check your Username & Password, and try again.",
             };
-  },
- 
+        },
+        computed: {
+            auth() {
+                return this.$auth
+            }
+        },
+        methods: {
+            loginUser() {
+                this.performLogin()
+                this.redirectAfterLogin()
+            },
+
+            async performLogin() {
+                this.loginError = false
+                try {
+                    let response = await this.$auth.loginWith('local', { data: this.login })
+                } catch (error) {
+                    this.loginError = true
+                    console.log(error)
+                }
+            },
+
+            redirectAfterLogin() {
+                this.$router.push({ name: 'index' })
+            }
+        },
+        head() {
+            return {
+                title: 'Login',
+                meta: [
+                    {
+                        hid: 'description',
+                        name: 'description',
+                        content: 'Login to manage your own recipes, food, and ingredients',
+                    },
+                ],
+            }
+        },
     }
 </script>
 

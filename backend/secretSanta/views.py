@@ -1,4 +1,6 @@
 from rest_framework import viewsets, permissions
+from django_filters import rest_framework as filters
+# from secretSanta import filters
 from secretSanta import models
 from secretSanta import serializers
 
@@ -10,10 +12,22 @@ class EventViewSet(viewsets.ModelViewSet):
     serializer_class = serializers.EventSerializer
     # permission_classes = [permissions.IsAuthenticated]
 
-class EventUserViewSet(viewsets.ModelViewSet):
-    queryset = models.EventUser.objects.all()
+class MyEventsUserViewSet(viewsets.ModelViewSet):
+    # queryset = models.EventUser.objects.all()
     serializer_class = serializers.EventUserSerializer
-    # permission_classes = [permissions.IsAuthenticated]
+    permission_classes = [permissions.IsAuthenticated]
+
+    def get_queryset(self):
+        print(self.request.user.id)
+        return models.EventUser.objects.filter(userId=self.request.user.id)
+
+class MyOwnedEventsUserViewSet(viewsets.ModelViewSet):
+    serializer_class = serializers.EventUserSerializer
+    permission_classes = [permissions.IsAuthenticated]
+
+    def get_queryset(self):
+        eventUsers = models.EventUser.objects.filter(userId=self.request.user.id, isOwner=True)
+        return models.EventUser.objects.filter(eventId__in=eventUsers.values_list('eventId'))
 
 class ExclusionPairingViewSet(viewsets.ModelViewSet):
     queryset = models.ExclusionPairing.objects.all()

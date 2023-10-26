@@ -6,7 +6,8 @@ from . import views
 
 router = DefaultRouter()
 router.register(r'event', views.EventViewSet, basename="event")
-router.register(r'eventUser', views.EventUserViewSet, basename="eventUser")
+router.register(r'myEventUser', views.MyEventsUserViewSet, basename="myEventsUser")
+router.register(r'myOwnedEventUser', views.MyOwnedEventsUserViewSet, basename="myOwnedEventsUser")
 router.register(r'exclusionPairing', views.ExclusionPairingViewSet, basename="exclusionPairing")
 router.register(r'santaPairing', views.SantaPairingViewSet, basename="santaPairing")
 router.register(r'wishListItem', views.WishListItemViewSet, basename="wishListItem")

@@ -49,7 +49,7 @@
       </v-card-title>
     </v-card>
     <v-card>
-      <v-card-title v-if="$auth.username='Rick'" >
+      <v-card-title v-if="$auth.username=='Rick'" >
         Super user '{{$auth.username}}' is logged in!!!
       </v-card-title>
     </v-card>

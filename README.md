@@ -26,6 +26,17 @@ python manage.py migrate
 - your DB will be located in the \backend folder called db.sqlite3
 ```
 
+### DB admin user setup
+python manage.py createsuperuser
+- will prompt for username, password
+
+### Startup backend server
+python manage.py runserver
+- provides server with url to manage DB
+- 127.0.0.1:8000 for example
+- nicer user interface: 127.0.0.1:8000/admin
+
+
 ### SQLite app
 Use the following DB Browser for SQLite
 https://sqlitebrowser.org/

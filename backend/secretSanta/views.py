@@ -1,5 +1,5 @@
 from rest_framework import viewsets, permissions
-from django_filters import rest_framework as filters
+# from django_filters import rest_framework as filters
 # from secretSanta import filters
 from secretSanta import models
 from secretSanta import serializers

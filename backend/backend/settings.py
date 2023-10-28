@@ -46,7 +46,6 @@ INSTALLED_APPS = [
     # 3ed party
     'rest_framework',
     'corsheaders',
-    'django_filters',
 
     # Project apps
     'user',
@@ -154,7 +153,12 @@ CORS_ORIGIN_WHITELIST = (
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.1/howto/static-files/
 
-STATIC_URL = 'static/'
+STATIC_ROOT = '/home/django/django_project/django_project/static'
+STATIC_URL = '/static/'
+
+STATICFILES_DIRS = (
+    os.path.join(BASE_DIR, 'static'),
+)
 # API_KEY = os.getenv('API_KEY')
 
 # Default primary key field type

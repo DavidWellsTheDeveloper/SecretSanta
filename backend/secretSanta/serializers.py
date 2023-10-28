@@ -10,7 +10,7 @@ class EventSerializer(serializers.ModelSerializer):
 class EventUserSerializer(serializers.ModelSerializer):
     class Meta:
         model = models.EventUser
-        fields = '__all__'
+        fields = ['eventId']
         depth = 1
 
 class ExclusionPairingSerializer(serializers.ModelSerializer):

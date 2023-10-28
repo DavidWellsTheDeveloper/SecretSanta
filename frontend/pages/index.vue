@@ -7,6 +7,7 @@
 <script>
 
 export default {
+  // User does not need to be authenticated for this page
   auth: false,
   name: "index",
   data() {

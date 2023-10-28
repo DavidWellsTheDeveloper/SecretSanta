@@ -103,7 +103,7 @@
 export default {
   data() {
     return {
-      title: 'Pantry To Store',
+      title: 'Secret Santa',
       drawer: false,
       fixed: false,
       itemsCommon: [

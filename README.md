@@ -13,9 +13,9 @@ pip install -r requirements.txt
 ### Setup on windows
 ```
 cd backend
-setup a virtual environment (i.e. called secretsanta)
+setup a virtual environment (i.e. called winvenv)
 see (https://medium.com/analytics-vidhya/virtual-environment-6ad5d9b6af59) for instructions
-.\secretsanta\Scripts\activate
+.\winvenv\env\Scripts\activate
 pip install -r requirements.txt
 ```
 

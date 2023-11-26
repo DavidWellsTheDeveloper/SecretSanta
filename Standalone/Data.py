@@ -92,7 +92,59 @@ def InitDB(conn):
 
     InsertUsers(conn, eventId)
 
+# Return True if match was made, False otherwise
+def MatchSanta(conn, rows, santaRowIndex, targetNumList):
+    cursor = conn.cursor()
+    numRows = len(rows)
+    santaRow = rows[santaRowIndex]
+    matchMade = False
+    failCount = 0
+    while not matchMade:
+        targetNum = math.trunc(random.random() * numRows)
+        targetRow = rows[targetNum]
+        if targetRow['id'] == santaRow['id']: # target is same as santa
+            matchMade = False
+        elif targetNum in targetNumList: # target already has a santa
+            matchMade = False
+        elif targetRow['name'] == santaRow['name']: # family of target is same as family of santa
+            matchMade = False
+        else:
+            cursor.execute("UPDATE EventUser SET TargetUserId=? WHERE UserId=?", (targetRow['id'], santaRow['id']))
+            conn.commit()
+            targetNumList.add(targetNum)
+            matchMade = True
 
+        if not matchMade:
+            # sometimes we end up with the only remaining target is the santa we are pairing.
+            # in those cases we need to redo the pairings from scratch
+            failCount += 1
+            if failCount>100:
+                matchMade = True
+                inClause = ""
+                for failRow in rows:
+                    if len(inClause)>0:
+                        inClause += ", "
+                    inClause += str(failRow['id'])
+                query = "UPDATE EventUser SET TargetUserId=NULL WHERE UserId IN (" + inClause + ")"
+                cursor.execute(query)
+                return False
+
+    return True
+
+# returns true if success, false if failed
+def MatchSantas(conn, rows):
+    numRows = len(rows)
+    cursor = conn.cursor()
+    targetNumList = set()
+    for i in range(numRows):
+        santaRow = rows[i]
+        if not MatchSanta(conn, rows, i, targetNumList):
+            return False
+
+    return True
+
+# match each santa with a target
+# DB will be updated if sucessful
 def CreatePairings(conn):
     cursor = conn.cursor()
 
@@ -107,41 +159,6 @@ def CreatePairings(conn):
     rows = cursor.fetchall()
 
     numRows = len(rows)
-    failed = True
-    while failed:
-        failed = False
-        targetNumList = set()
-        for i in range(numRows):
-            santaRow = rows[i]
+    while not MatchSantas(conn, rows):
+        pass
 
-            matchMade = False
-            failCount = 0
-            while not matchMade:
-                targetNum = math.trunc(random.random() * numRows)
-                targetRow = rows[targetNum]
-                if targetRow['id'] == santaRow['id']: # target is same as santa
-                    matchMade = False
-                elif targetNum in targetNumList: # target already has a santa
-                    matchMade = False
-                elif targetRow['name'] == santaRow['name']: # family of target is same as family of santa
-                    matchMade = False
-                else:
-                    cursor.execute("UPDATE EventUser SET TargetUserId=? WHERE UserId=?", (targetRow['id'], santaRow['id']))
-                    conn.commit()
-                    targetNumList.add(targetNum)
-                    matchMade = True
-
-                if not matchMade:
-                    # sometimes we end up with the only remaining target is the santa we are pairing.
-                    # in those cases we need to redo the pairings from scratch
-                    failCount += 1
-                    if failCount>100:
-                        matchMade = True
-                        failed = True
-                        inClause = ""
-                        for failRow in rows:
-                            if len(inClause)>0:
-                                inClause += ", "
-                            inClause += str(failRow['id'])
-                        query = "UPDATE EventUser SET TargetUserId=NULL WHERE UserId IN (" + inClause + ")"
-                        cursor.execute(query)
